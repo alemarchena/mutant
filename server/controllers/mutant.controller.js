@@ -21,7 +21,6 @@ controller.isMutant = async(req,res) => {
         //------------------------------------ MODELADO DEL JSON  -----------------------------
         let filas = JSON.parse(mutante.dna); //convierto el json en un objeto
 
-
         var m = new Array(filas.length); //creo una MATRIZ de altura igual a la cantidad de filas
         var columna;
         var base = ['A', 'T', 'C', 'G'];
@@ -30,34 +29,24 @@ controller.isMutant = async(req,res) => {
         for (var f = 0; f < filas.length; f++) //recorro las filas
         {
             columna = filas[f].toString(); //guardo el CONTENIDO de la fila como una columna
-            
             var matrizcaracteres = new Array(columna.length); //creo una matriz para guardar los caracteres
             if(f==0)
                 validadorcolumna = columna.length;
             
             //valido que todas los registros del json tengan el mismo tamaño
-            if(validadorcolumna != columna.length )
-            {
-                res.status(403).send(respuesta);
-                return;
-            }
+            if(validadorcolumna != columna.length ) {res.status(403).send(respuesta);return;} //ERROR
 
             for(var c=0; c < columna.length ;c++)
-            {   //encolumno los caracteres
-                var caracter = columna.substring(c, c+1);
-
+            {   
+                var caracter = columna.substring(c, c + 1); //encolumno los caracteres
                 var basevalida=false;
-                //valido que los caracteres esten dentro de la base nitrogenada
-                for(veri=0;veri< base.length;veri++){
-                    if(caracter === base[veri]){
+                for (veri = 0; veri < base.length; veri++) //valido que los caracteres sean de base nitrogenada
+                {
+                    if(caracter === base[veri])
                         basevalida=true;
-                    }
                 }
 
-                if (!basevalida){
-                    res.status(403).send(respuesta);
-                    return;
-                }
+                if (!basevalida){ res.status(403).send(respuesta); return; } //ERROR
 
                 if(caracter )
                 matrizcaracteres[c] = caracter; 
@@ -67,15 +56,13 @@ controller.isMutant = async(req,res) => {
             m[f] = columna;
         }
 
-
         //------------------------------------ VERIFICACION DE ADN -----------------------------
         var longitudsecuencia = 4;
         var cantidadsecuencias = 0;
         var cl = columna.length;
         var fl =filas.length;
-
-        //verifica secuencia HORIZONTALMENTE ----------------------------------
-        for(var f=0;f< fl ;f++)
+       
+        for (var f = 0; f < fl; f++) //verifica secuencia HORIZONTALMENTE --------------------
         {
             var c=0;
             while (c <= (columna.length - longitudsecuencia))
@@ -88,18 +75,16 @@ controller.isMutant = async(req,res) => {
                 c++;    
             }
             
-        }//--------------------------------------------------------------------
+        }//----------------------------------------------------------------------------------
         
         if(cantidadsecuencias <= 1) //si aun no es mutante
         {
-            //verifica secuencia VERTICALMENTE ---------------------
             var c = 0;
-            while(c < columna.length)
+            while (c < columna.length)//verifica secuencia VERTICALMENTE ---------------------
             {
                 var f = 0;
                 while (f <= (fl - longitudsecuencia)) 
                 {
-                    //console.log(m[f][c] + "," + m[f + 1][c] + "," + m[f + 2][c] + "," + m[f + 3][c]);
                     if (m[f][c] == m[f + 1][c] && m[f][c] == m[f + 2][c] && m[f][c] == m[f + 3][c]) 
                     {
                         cantidadsecuencias = cantidadsecuencias + 1;
@@ -114,15 +99,12 @@ controller.isMutant = async(req,res) => {
                     c = columna.length;
                 }
                 c++;
-            }//------------------------------------------------------
-
+            }//--------------------------------------------------------------------------------
             
             if (cantidadsecuencias <= 1) //si aun no es mutante
             {
                 var filalimite = fl - longitudsecuencia;
-
-                //verifica en ----DIAGONAL-------------
-                for (var f = 0; f <= filalimite; f++) 
+                for (var f = 0; f <= filalimite; f++)  //verifica en ----DIAGONAL-------------
                 {
                     var c = 0;
                     while (c <= (cl - longitudsecuencia) )  //cuantas columnas verifica
@@ -134,7 +116,6 @@ controller.isMutant = async(req,res) => {
                         {
                             cantidadsecuencias ++;
                         }
-
                         //de derecha a izquierda
                         if (m[f][cl - (1 - c)] == m[f + 1][cl - 2] && 
                             m[f][cl - (1 - c)] == m[f + 2][cl - 3] && 
@@ -144,12 +125,11 @@ controller.isMutant = async(req,res) => {
                         }
                         c++;
                     }
-                }//--------------------------------------
+                }//----------------------------------------------------------------------------
             }
         }
         
         var codigostatus = 0;
-
         if(cantidadsecuencias <=1) //¿Es mutante o no ?
         {
             esmutante = false;
@@ -159,14 +139,10 @@ controller.isMutant = async(req,res) => {
             codigostatus = 200;
         }
 
-
-
         //guardo el registro en bdd
         const estadistica = new modelostats();
-
         estadistica.esmutante = esmutante;
         estadistica.dna = mutante.dna;
-
         await estadistica.save();
 
         //respondo
