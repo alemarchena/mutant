@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 //lista el puerto al cual esta conectado el servidor
 app.set('puerto',process.env.PORT || 3000)
-app.listen('3000',() => {
+app.listen(puerto,() => {
     console.log('Server en puerto : ',app.get('puerto') );
 });
 
