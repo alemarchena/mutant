@@ -3,9 +3,9 @@ const mutante = require('../models/mutant.model');
 const modelostats = require('../models/stats.model');
 
 let respuesta = {
-    error: false,
-    codigo: 200,
-    mensaje: ''
+    error: true,
+    codigo: 403,
+    mensaje: 'dna inválido'
 };
 
 controller.isMutant = async(req,res) => {
@@ -13,37 +13,60 @@ controller.isMutant = async(req,res) => {
     mutante.dna = req.body.dna;
    
     if (!mutante.dna) {
-        respuesta = {
-            error: true,
-            codigo: 403,
-            mensaje: 'El individuo no tiene dna'
-        }
         res.status(403).send(respuesta);
+        return;
     }
     else 
     {
         //------------------------------------ MODELADO DEL JSON  -----------------------------
         let filas = JSON.parse(mutante.dna); //convierto el json en un objeto
+
+
         var m = new Array(filas.length); //creo una MATRIZ de altura igual a la cantidad de filas
         var columna;
-
+        var base = ['A', 'T', 'C', 'G'];
+        var validadorcolumna=0;
 
         for (var f = 0; f < filas.length; f++) //recorro las filas
         {
             columna = filas[f].toString(); //guardo el CONTENIDO de la fila como una columna
             
             var matrizcaracteres = new Array(columna.length); //creo una matriz para guardar los caracteres
+            if(f==0)
+                validadorcolumna = columna.length;
+            
+            //valido que todas los registros del json tengan el mismo tamaño
+            if(validadorcolumna != columna.length )
+            {
+                res.status(403).send(respuesta);
+                return;
+            }
 
             for(var c=0; c < columna.length ;c++)
             {   //encolumno los caracteres
                 var caracter = columna.substring(c, c+1);
+
+                var basevalida=false;
+                //valido que los caracteres esten dentro de la base nitrogenada
+                for(veri=0;veri< base.length;veri++){
+                    if(caracter === base[veri]){
+                        basevalida=true;
+                    }
+                }
+
+                if (!basevalida){
+                    res.status(403).send(respuesta);
+                    return;
+                }
+
+                if(caracter )
                 matrizcaracteres[c] = caracter; 
             }
             //guardo en cada fila los caracteres formando una matriz bidimensional
             m[f] = new Array(columna.length); 
             m[f] = columna;
         }
-        
+
 
         //------------------------------------ VERIFICACION DE ADN -----------------------------
         var longitudsecuencia = 4;
