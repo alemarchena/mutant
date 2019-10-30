@@ -4,13 +4,14 @@ require('dotenv').config();
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').parse('DATABASE_URL');
 }
-
+console.log(process.env.NODE_ENV);
+//obtengo la conexion a la base de datos en el inicio
+const { mongoose } = require('./database.js');
 
 const express = require('express');
 const app = express();
 
-//obtengo la conexion a la base de datos en el inicio
-const { mongoose } = require('./database.js');
+
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
