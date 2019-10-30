@@ -4,9 +4,9 @@ const {Schema} =  mongoose;
 
 const estadisticas = new Schema({
 
-    count_mutant_dna:   {type:int},
-    count_human_dna:     {type:int},
-    ratio:              {type:double}
+    count_mutant_dna:   {type:Number},
+    count_human_dna:    {type:Number},
+    ratio:              {type:Number}
 });
 
 module.exports = mongoose.model('estadisticas',estadisticas);

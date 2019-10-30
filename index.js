@@ -32,6 +32,9 @@ app.use(morgan('dev'));
 const rutas = require('./server/routes/mutant.routes');
 app.use('/',rutas);
 
+const srutas = require('./server/routes/stats.routes');
+app.use('/', srutas);
+
 const cors = require('cors');
 app.use(cors);
 
