@@ -1,6 +1,6 @@
 const controller = {};
 const mutante = require('../models/mutant.model');
-
+const modelostats = require('../models/stats.model');
 
 let respuesta = {
     error: false,
@@ -8,15 +8,10 @@ let respuesta = {
     mensaje: ''
 };
 
-
-
 controller.isMutant = async(req,res) => {
-
     var esmutante = false;
-
     mutante.dna = req.body.dna;
    
-
     if (!mutante.dna) {
         respuesta = {
             error: true,
@@ -28,7 +23,6 @@ controller.isMutant = async(req,res) => {
     else 
     {
         //------------------------------------ MODELADO DEL JSON  -----------------------------
-
         let filas = JSON.parse(mutante.dna); //convierto el json en un objeto
         var m = new Array(filas.length); //creo una MATRIZ de altura igual a la cantidad de filas
         var columna;
@@ -48,7 +42,6 @@ controller.isMutant = async(req,res) => {
             //guardo en cada fila los caracteres formando una matriz bidimensional
             m[f] = new Array(columna.length); 
             m[f] = columna;
-          
         }
         
 
@@ -74,8 +67,7 @@ controller.isMutant = async(req,res) => {
             
         }//--------------------------------------------------------------------
         
-
-        if(cantidadsecuencias <= 1) //aun no es mutante
+        if(cantidadsecuencias <= 1) //si aun no es mutante
         {
             //verifica secuencia VERTICALMENTE ---------------------
             var c = 0;
@@ -102,7 +94,7 @@ controller.isMutant = async(req,res) => {
             }//------------------------------------------------------
 
             
-            if (cantidadsecuencias <= 1) //aun no es mutante
+            if (cantidadsecuencias <= 1) //si aun no es mutante
             {
                 var filalimite = fl - longitudsecuencia;
 
@@ -130,21 +122,32 @@ controller.isMutant = async(req,res) => {
                         c++;
                     }
                 }//--------------------------------------
-
-                if (cantidadsecuencias <= 1) //NO ES MUTANTE ES HUMANO
-                {
-                    esmutante = false;
-                    res.status(403).send(esmutante);
-                }
-            }else
-            {
-                esmutante = true;
-                res.status(200).send(esmutante);
             }
+        }
+        
+        var codigostatus = 0;
+
+        if(cantidadsecuencias <=1) //¿Es mutante o no ?
+        {
+            esmutante = false;
+            codigostatus = 403;
         }else{
             esmutante = true;
-            res.status(200).send(esmutante);
+            codigostatus = 200;
         }
+
+
+
+        //guardo el registro en bdd
+        const estadistica = new modelostats();
+
+        estadistica.esmutante = esmutante;
+        estadistica.dna = mutante.dna;
+
+        await estadistica.save();
+
+        //respondo
+        res.status(codigostatus).send(esmutante);
     }
 };
 
