@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 //lista el puerto al cual esta conectado el servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT,() => {
-    console.log('Server en puerto : ',app.get('puerto') );
+    console.log('Server en puerto : ',app.get(PORT) );
 });
 
 // muestra los mensajes del servidor

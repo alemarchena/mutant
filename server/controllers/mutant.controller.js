@@ -9,6 +9,11 @@ let respuesta = {
     mensaje: ''
 };
 
+controller.getvacio = async(req,res) => {
+  
+    res.status(200).send('Get vacío');
+};
+
 controller.isMutant = async(req,res) => {
 
     mutante.dna = req.body.dna;
@@ -106,10 +111,6 @@ controller.isMutant = async(req,res) => {
                     var c = 0;
                     while (c <= (cl - longitudsecuencia) )  //cuantas columnas verifica
                     {
-                        console.log(
-                            m[f][c] + "==" + m[f + 1][c + 1] +"-"+
-                            m[f][c] + "==" + m[f + 2][c + 2] +"-"+
-                            m[f][c] + "==" + m[f + 3][c + 3]);
                         //de izquierda a derecha 
                         if (m[f][c] == m[f + 1][c + 1] && 
                             m[f][c] == m[f + 2][c + 2] && 
