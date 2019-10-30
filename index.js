@@ -12,24 +12,21 @@ const express = require('express');
 const app = express();
 
 
-
+//los datos que vienen del navegador son intrepretados por el servidor como json
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
 //lista el puerto al cual esta conectado el servidor
-app.set('puerto',process.env.PORT || 3000)
-app.listen(puerto,() => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT,() => {
     console.log('Server en puerto : ',app.get('puerto') );
 });
 
 // muestra los mensajes del servidor
 const morgan = require('morgan');
 app.use(morgan('dev'));
-
-//los datos que vienen del navegador son intrepretados por el servidor como json
-//app.use(express.json());
 
 //utiliza rutas
 const rutas = require('./server/routes/mutant.routes');
