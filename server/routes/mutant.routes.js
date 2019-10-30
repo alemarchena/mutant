@@ -4,7 +4,7 @@ const router = express.Router();
 const controller = require('../controllers/mutant.controller.js');
 
 router.post('/mutant', controller.isMutant);
-router.get('/mutant',controller.getvacio);
+router.get('/stats',controller.getvacio);
 
 module.exports = router;
 

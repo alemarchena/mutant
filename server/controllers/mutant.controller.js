@@ -36,9 +36,11 @@ controller.isMutant = async(req,res) => {
         var m = new Array(filas.length); //creo una MATRIZ de altura igual a la cantidad de filas
         var columna;
 
+
         for (var f = 0; f < filas.length; f++) //recorro las filas
         {
             columna = filas[f].toString(); //guardo el CONTENIDO de la fila como una columna
+            
             var matrizcaracteres = new Array(columna.length); //creo una matriz para guardar los caracteres
 
             for(var c=0; c < columna.length ;c++)
@@ -49,8 +51,9 @@ controller.isMutant = async(req,res) => {
             //guardo en cada fila los caracteres formando una matriz bidimensional
             m[f] = new Array(columna.length); 
             m[f] = columna;
-            // console.log(m[f]);
+          
         }
+        
 
         //------------------------------------ VERIFICACION DE ADN -----------------------------
         var longitudsecuencia = 4;
@@ -62,18 +65,18 @@ controller.isMutant = async(req,res) => {
         for(var f=0;f< fl ;f++)
         {
             var c=0;
-            while (c < (columna.length - longitudsecuencia) + 1)
+            while (c <= (columna.length - longitudsecuencia))
             {
-                //console.log(m[f][c] + "," + m[f][c + 1] +","+ m[f][c + 2] + "," + m[f][c + 3]);
-
                 if (m[f][c] == m[f][c + 1] && m[f][c] == m[f][c + 2] && m[f][c] == m[f][c + 3])
                 {
                     cantidadsecuencias = cantidadsecuencias + 1;
                     c = cl;
                 }
-                c++;
+                c++;    
             }
+            
         }//--------------------------------------------------------------------
+        
 
         if(cantidadsecuencias <= 1) //aun no es mutante
         {
@@ -82,7 +85,7 @@ controller.isMutant = async(req,res) => {
             while(c < columna.length)
             {
                 var f = 0;
-                while (f < (fl - longitudsecuencia) + 1) 
+                while (f <= (fl - longitudsecuencia)) 
                 {
                     //console.log(m[f][c] + "," + m[f + 1][c] + "," + m[f + 2][c] + "," + m[f + 3][c]);
                     if (m[f][c] == m[f + 1][c] && m[f][c] == m[f + 2][c] && m[f][c] == m[f + 3][c]) 
@@ -140,15 +143,11 @@ controller.isMutant = async(req,res) => {
             {
                 esmutante = true;
                 res.status(200).send(esmutante);
-
             }
         }else{
             esmutante = true;
             res.status(200).send(esmutante);
-
         }
-        
-        
     }
 };
 
