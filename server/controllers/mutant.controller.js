@@ -1,7 +1,6 @@
 const controller = {};
 const mutante = require('../models/mutant.model');
 
-var esmutante = false;
 
 let respuesta = {
     error: false,
@@ -15,6 +14,8 @@ controller.getvacio = async(req,res) => {
 };
 
 controller.isMutant = async(req,res) => {
+
+    var esmutante = false;
 
     mutante.dna = req.body.dna;
    
@@ -129,16 +130,25 @@ controller.isMutant = async(req,res) => {
                         c++;
                     }
                 }//--------------------------------------
+
+                if (cantidadsecuencias <= 1) //NO ES MUTANTE ES HUMANO
+                {
+                    esmutante = false;
+                    res.status(403).send(esmutante);
+                }
             }else
             {
                 esmutante = true;
+                res.status(200).send(esmutante);
+
             }
         }else{
             esmutante = true;
+            res.status(200).send(esmutante);
+
         }
         
         
-        res.status(200).send(esmutante);
     }
 };
 
