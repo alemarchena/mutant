@@ -8,10 +8,7 @@ let respuesta = {
     mensaje: ''
 };
 
-controller.getvacio = async(req,res) => {
-  
-    res.status(200).send('Get vacío');
-};
+
 
 controller.isMutant = async(req,res) => {
 
