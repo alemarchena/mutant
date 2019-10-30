@@ -43,7 +43,7 @@ controller.isMutant = async(req,res) => {
             //guardo en cada fila los caracteres formando una matriz bidimensional
             m[f] = new Array(columna.length); 
             m[f] = columna;
-            console.log(m[f]);
+            // console.log(m[f]);
         }
 
         //------------------------------------ VERIFICACION DE ADN -----------------------------
