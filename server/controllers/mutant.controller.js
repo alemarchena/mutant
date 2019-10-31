@@ -158,18 +158,6 @@ exports.isMutant = async function(req, res)
     }
 };
 
-exports.borrartodo = async function(req,res)
-{
-    const ms = new modelostats();
-
-    ms.remove(function (err) 
-    {
-        if (err) { return handleError(res, err); }
-        return res.sendStatus(204);
-    });
-
-};
-
 function handleError(res, err) {
     return res.sendStatus(500, err);
 }

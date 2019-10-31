@@ -7,21 +7,7 @@ var path = '/mutant';
 var epath = '/stats';
 
 describe('Controlador de mutantes', () => {
-   
-    it('Borrar coleccion', (done) => {
-        chai.request(url)
-            .delete(path)
-            .set('Content-Type', 'application/json')
-            .end(function (err, res, body) {
-                if (err) {
-                    done(err);
-                } else {
-                    expect(res).to.have.status(204);
-                    done();
-                }
-            });
-    }).timeout(10000);
-
+  
     it('Petición POST vacía', (done) => {
         chai.request(url)
             .post(path)
