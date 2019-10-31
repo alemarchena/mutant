@@ -145,19 +145,31 @@ exports.isMutant = async function(req, res)
             const estadistica = new modelostats();
             estadistica.esmutante = esmutante;
             estadistica.dna = mutante.dna;
-            await estadistica.save();
+            await estadistica.save( function (err){
+                if (err) { return handleError(res, err); }
+            });
 
             //respondo
             res.status(codigostatus).send(esmutante);
         }
     }catch(e)
     {
-        respuesta = {
-            error: true,
-            codigo: 401,
-            mensaje: 'Se produjo un error en el verificador'
-        };
-        codigostatus = 401;
-        res.status(codigostatus).send(respuesta);
+        return handleError(res, err);
     }
 };
+
+exports.borrartodo = async function(req,res)
+{
+    const ms = new modelostats();
+
+    ms.remove(function (err) 
+    {
+        if (err) { return handleError(res, err); }
+        return res.sendStatus(204);
+    });
+
+};
+
+function handleError(res, err) {
+    return res.sendStatus(500, err);
+}

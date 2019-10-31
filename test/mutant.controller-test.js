@@ -7,6 +7,21 @@ var path = '/mutant';
 var epath = '/stats';
 
 describe('Controlador de mutantes', () => {
+   
+    it('Borrar coleccion', (done) => {
+        chai.request(url)
+            .delete(path)
+            .set('Content-Type', 'application/json')
+            .end(function (err, res, body) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(204);
+                    done();
+                }
+            });
+    }).timeout(10000);
+
     it('Petición POST vacía', (done) => {
         chai.request(url)
             .post(path)
@@ -20,7 +35,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(1000);
+    }).timeout(10000);
 
     it('¿ es HUMANO ? - Matriz adn CUADRADA 6x6', (done) => {
         chai.request(url)
@@ -33,7 +48,7 @@ describe('Controlador de mutantes', () => {
                 }else{
                     expect(res).to.have.status(403); 
                     done();
-                   
+                
                 }  
             });
     }).timeout(10000);
@@ -173,4 +188,5 @@ describe('Controlador de mutantes', () => {
                 }
             });
     }).timeout(10000);
+    
 });

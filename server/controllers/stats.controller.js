@@ -4,21 +4,29 @@ const estadistica = require('../models/stats.model');
 
 scontroller.getestadistica = async (req, res) => {
 
-    const esmut = await estadistica.find({ esmutante: true });//consulta los mutantes
-    const eshum = await estadistica.find({ esmutante: false });//consulta los humanos
+    try{
+        const esmut = await estadistica.find({ esmutante: true });//consulta los mutantes
+        const eshum = await estadistica.find({ esmutante: false });//consulta los humanos
 
-    let respuesta = {
-        count_mutant_dna:0,
-        count_human_dna:0,
-        ratio:0
-    };
-    
-    //calculo estadísticas
-    respuesta.count_mutant_dna = esmut.length;
-    respuesta.count_human_dna = eshum.length;
-    respuesta.ratio = esmut.length / eshum.length;
+        let respuesta = {
+            count_mutant_dna:0,
+            count_human_dna:0,
+            ratio:0
+        };
+        
+        //calculo estadísticas
+        respuesta.count_mutant_dna = esmut.length;
+        respuesta.count_human_dna = eshum.length;
 
-    res.json(respuesta);
+        if(respuesta.count_mutant_dna > 0 && respuesta.count_human_dna > 0)
+            respuesta.ratio = esmut.length / eshum.length;
+        else
+            respuesta.ratio = 0;
+
+        res.json(respuesta);
+    } catch (e) {
+        return handleError(res, err);
+    }
 };
 
 module.exports = scontroller;
