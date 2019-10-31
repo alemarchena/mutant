@@ -1,4 +1,4 @@
-const controller = {};
+// const controller = {};
 const mutante = require('../models/mutant.model');
 const modelostats = require('../models/stats.model');
 
@@ -8,11 +8,12 @@ let respuesta = {
     mensaje: 'dna inválido'
 };
 
-controller.isMutant = async(req,res) => {
+exports.isMutant = async function(req, res){
     var esmutante = false;
     mutante.dna = req.body.dna;
-   
+
     if (!mutante.dna) {
+
         res.status(403).send(respuesta);
         return;
     }
@@ -125,7 +126,7 @@ controller.isMutant = async(req,res) => {
                         }
                         c++;
                     }
-                }//----------------------------------------------------------------------------
+                }//----------------------------------------------------------------
             }
         }
         
@@ -150,4 +151,4 @@ controller.isMutant = async(req,res) => {
     }
 };
 
-module.exports = controller;
+//  module.exports = controller;
