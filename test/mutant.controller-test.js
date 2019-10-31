@@ -5,9 +5,6 @@ chai.use(chaiHttp);
 const url = "https://mutant-ml.herokuapp.com";
 var path = '/mutant';
 
-//var controller = require('../server/controllers/mutant.controller.js');
-
-
 describe('Controlador de mutantes ', () => {
     console.log (url);
     it('Verificamos si es mutante o humano', (done) => {
@@ -22,9 +19,7 @@ describe('Controlador de mutantes ', () => {
                     expect(res).to.have.status(403); 
                     
                     done();
-                }
-                // done();
-                
+                }  
             });
     }).timeout(10000);
 });
