@@ -1,5 +1,5 @@
 const mutante = require('../models/mutant.model');
-const modelostats = require('../models/stats.model');
+const estadistica = require('../models/stats.model');
 
 let respuesta = {
     error: true,
@@ -145,28 +145,26 @@ exports.isMutant = async function(req, res)
                 codigostatus = 200;
             }
 
-            
-            //guardo el registro en bdd
-            const estadistica = new modelostats();
-            estadistica.esmutante = esmutante;
-            estadistica.dna = dnaparaguardar.trim();
-         
-
-            var consulta = { dna: estadistica.dna.trim() };
-            console.log(consulta);
-
-      
-            // await estadistica.findOneAndUpdate(consulta, { $set: { esmutante: esmutante } }, { upsert: true },(err,doc)=>{
-            //     if(err)
-            //         console.log(err);
-            //     else
-            //         console.log(doc);
-            // });
-                
-
-            await estadistica.save( function (err){
-                if (err) { return handleError(res, err); }
+            // console.log(dnaparaguardar.trim());
+            const esperando = await estadistica.find({dna:dnaparaguardar},'dna', async function(err,muthum){
+                if(err) 
+                {
+                    // console.log("Error:" + err + "Muthum:" + muthum);
+                    return handleError(res, err);   
+                }
             });
+
+            if(esperando.length<=0){
+                //guardo el registro en bdd
+                const esta = new estadistica();
+                esta.esmutante = esmutante;
+                esta.dna = dnaparaguardar.trim();
+
+                // console.log("Personaje encontrado:" + muthum);
+                await esta.save(function (err) {
+                    if (err) { return handleError(res, err); }
+                });
+            }
 
             //respondo
             res.status(codigostatus).send(esmutante);
