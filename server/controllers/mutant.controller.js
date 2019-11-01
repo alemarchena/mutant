@@ -12,6 +12,7 @@ exports.isMutant = async function(req, res)
     try{
         var esmutante = false;
         mutante.dna = req.body.dna;
+        var dnaparaguardar="";
 
         if (!mutante.dna) {
 
@@ -41,11 +42,14 @@ exports.isMutant = async function(req, res)
                 for(var c=0; c < columna.length ;c++)
                 {   
                     var caracter = columna.substring(c, c + 1); //encolumno los caracteres
+                    dnaparaguardar = dnaparaguardar + caracter; //creo un string con el dna
+
                     var basevalida=false;
                     for (veri = 0; veri < base.length; veri++) //valido que los caracteres sean de base nitrogenada
                     {
                         if(caracter === base[veri])
                             basevalida=true;
+
                     }
 
                     if (!basevalida){ res.status(403).send(respuesta); return; } //ERROR
@@ -141,10 +145,25 @@ exports.isMutant = async function(req, res)
                 codigostatus = 200;
             }
 
+            
             //guardo el registro en bdd
             const estadistica = new modelostats();
             estadistica.esmutante = esmutante;
-            estadistica.dna = mutante.dna;
+            estadistica.dna = dnaparaguardar.trim();
+         
+
+            var consulta = { dna: estadistica.dna.trim() };
+            console.log(consulta);
+
+      
+            // await estadistica.findOneAndUpdate(consulta, { $set: { esmutante: esmutante } }, { upsert: true },(err,doc)=>{
+            //     if(err)
+            //         console.log(err);
+            //     else
+            //         console.log(doc);
+            // });
+                
+
             await estadistica.save( function (err){
                 if (err) { return handleError(res, err); }
             });
@@ -154,10 +173,18 @@ exports.isMutant = async function(req, res)
         }
     }catch(e)
     {
-        return handleError(res, err);
+        return handleError(res, e);
     }
 };
 
+
 function handleError(res, err) {
     return res.sendStatus(500, err);
+}
+
+exports.buscaxdna = async function (req,res)
+{
+    console.log("Registro buscado WEB:" + req.params.dna.trim());
+    const encontrado = await modelostats.find({ dna: req.params.dna.trim()});
+    res.json(encontrado);
 }
