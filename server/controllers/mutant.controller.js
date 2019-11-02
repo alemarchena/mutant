@@ -19,7 +19,7 @@ exports.isMutant = async function(req, res)
             res.status(400).send(respuesta);
             return;
         }
-        else 
+        else
         {
             //------------------------------------ MODELADO DEL JSON  -----------------------------
             let filas = JSON.parse(mutante.dna); //convierto el json en un objeto
@@ -35,12 +35,12 @@ exports.isMutant = async function(req, res)
                 var matrizcaracteres = new Array(columna.length); //creo una matriz para guardar los caracteres
                 if(f==0)
                     validadorcolumna = columna.length;
-                
+
                 //valido que todas los registros del json tengan el mismo tamaño
                 if (validadorcolumna != columna.length || columna.length < base.length) {res.status(400).send(respuesta);return;} //ERROR
-                
+
                 for(var c=0; c < columna.length ;c++)
-                {   
+                {
                     var caracter = columna.substring(c, c + 1); //encolumno los caracteres
                     dnaparaguardar = dnaparaguardar + caracter; //creo un string con el dna
 
@@ -55,10 +55,10 @@ exports.isMutant = async function(req, res)
                     if (!basevalida){ res.status(400).send(respuesta); return; } //ERROR
 
                     if(caracter )
-                    matrizcaracteres[c] = caracter; 
+                    matrizcaracteres[c] = caracter;
                 }
                 //guardo en cada fila los caracteres formando una matriz bidimensional
-                m[f] = new Array(columna.length); 
+                m[f] = new Array(columna.length);
                 m[f] = columna;
             }
 
@@ -67,7 +67,7 @@ exports.isMutant = async function(req, res)
             var fl = filas.length;
 
             var cantidadsecuencias = esMutante(m,cl,fl);
-            
+
             var codigostatus = 0;
             if(cantidadsecuencias <=1) //¿Es mutante o no ?
             {
@@ -113,22 +113,26 @@ async function guardar(esmutante,dnaparaguardar){
     });
 }
 
- exports.elimnartodo = async function() {
-    const estadistica = require('../models/stats.model');
+ exports.eliminartodo = async function(req,res) {
 
-    //elimino todos los datos de la coleccion
-    // const esta = new estadistica();
-    // esta.esmutante = esmutante;
-    // esta.dna = dnaparaguardar.trim();
+     const estadistica = require('../models/stats.model');
+     try {
+        await estadistica.deleteMany({},async function(err,res){
+             if(err){
+                 return handleError(res,err)
+             }else
+             {
 
-    // console.log("Personaje encontrado:" + muthum);
-     await estadistica.remove(function (err) {
-        if (err) { 
-            return handleError(res, err); 
-        }
+             }
+         });
+        
+        res.status(200).send("listo");
 
-        res.sendStatus(100);
-    });
+
+
+     } catch (e) {
+         return handleError(res, e);
+     }
 }
 
 function esMutante(m, cl, fl){
@@ -179,7 +183,7 @@ function esMutante(m, cl, fl){
                 var c = 0;
                 while (c <= (cl - longitudsecuencia))  //cuantas columnas verifica
                 {
-                    //de izquierda a derecha 
+                    //de izquierda a derecha
                     if (m[f][c] == m[f + 1][c + 1] &&
                         m[f][c] == m[f + 2][c + 2] &&
                         m[f][c] == m[f + 3][c + 3]) {

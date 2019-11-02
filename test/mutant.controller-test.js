@@ -18,7 +18,6 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
-                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -261,7 +260,6 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
-                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -290,7 +288,6 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
-                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -319,7 +316,7 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
-                    console.log(res.body);
+       
                 }
             });
     }).timeout(20000);
@@ -333,7 +330,7 @@ describe('Controlador de mutantes', () => {
                 if (err) {
                     done(err);
                 } else {
-                    expect(res).to.have.status(100);
+                    expect(res).to.have.status(200);
                     done();
                 }
             });
