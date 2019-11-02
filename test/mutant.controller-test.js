@@ -8,6 +8,20 @@ var epath = '/stats';
 
 describe('Controlador de mutantes', () => {
   
+    it('0) Verificando division por cero en base vacía ', (done) => {
+        chai.request(url)
+            .get(epath)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                    console.log(res.body);
+                }
+            });
+    }).timeout(20000);
+
     it('1) Petición POST vacía', (done) => {
         chai.request(url)
             .post(path)

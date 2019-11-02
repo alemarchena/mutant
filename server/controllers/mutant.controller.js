@@ -84,7 +84,7 @@ exports.isMutant = async function(req, res)
                 if(err)  { return handleError(res, err); } });
 
             if(esperando.length<=0){
-                guardar();
+                guardar(esmutante,dnaparaguardar);
             }
 
             //respondo
@@ -101,7 +101,7 @@ function handleError(res, err) {
     return res.sendStatus(500, err);
 }
 
-async function guardar(){
+async function guardar(esmutante,dnaparaguardar){
     //guardo el registro en bdd
     const esta = new estadistica();
     esta.esmutante = esmutante;
