@@ -49,7 +49,6 @@ exports.isMutant = async function(req, res)
                     {
                         if(caracter === base[veri])
                             basevalida=true;
-
                     }
 
                     if (!basevalida){ res.status(400).send(respuesta); return; } //ERROR
@@ -63,7 +62,7 @@ exports.isMutant = async function(req, res)
             }
 
             //------------------------------------ VERIFICACION DE ADN -----------------------------
-            var cl = columna.length;
+            var cl = columna.length; 
             var fl = filas.length;
 
             var cantidadsecuencias = esMutante(m,cl,fl);
@@ -78,7 +77,6 @@ exports.isMutant = async function(req, res)
                 codigostatus = 200;
             }
             // -------------------------------- GUARDANDO EN BASE DE DATOS ------------------------
-
             //verifico si existe el adn
             const esperando = await estadistica.find({dna:dnaparaguardar},'dna', async function(err,muthum){
                 if(err)  { return handleError(res, err); } });
@@ -87,7 +85,6 @@ exports.isMutant = async function(req, res)
                 guardar(esmutante,dnaparaguardar);
             }
 
-            //respondo
             res.status(codigostatus).send(esmutante);
         }
     }catch(e)
@@ -111,28 +108,6 @@ async function guardar(esmutante,dnaparaguardar){
     await esta.save(function (err) {
         if (err) { return handleError(res, err); }
     });
-}
-
- exports.eliminartodo = async function(req,res) {
-
-     const estadistica = require('../models/stats.model');
-     try {
-        await estadistica.deleteMany({},async function(err,res){
-             if(err){
-                 return handleError(res,err)
-             }else
-             {
-
-             }
-         });
-        
-        res.status(200).send("listo");
-
-
-
-     } catch (e) {
-         return handleError(res, e);
-     }
 }
 
 function esMutante(m, cl, fl){
@@ -202,4 +177,23 @@ function esMutante(m, cl, fl){
     }
 
     return cantidadsecuencias;
+}
+
+exports.eliminartodo = async function (req, res) {
+
+    const estadistica = require('../models/stats.model');
+    try {
+        await estadistica.deleteMany({}, async function (err, res) {
+            if (err) {
+                return handleError(res, err)
+            }
+        });
+
+        res.status(200).send("listo");
+
+
+
+    } catch (e) {
+        return handleError(res, e);
+    }
 }

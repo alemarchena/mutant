@@ -18,6 +18,7 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
+                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -260,6 +261,7 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
+                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -288,6 +290,7 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
+                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -316,7 +319,7 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
-       
+                    console.log(res.body);
                 }
             });
     }).timeout(20000);
@@ -332,6 +335,19 @@ describe('Controlador de mutantes', () => {
                 } else {
                     expect(res).to.have.status(200);
                     done();
+                }
+            });
+    }).timeout(20000);
+    it('22) Verificar colección vacía ', (done) => {
+        chai.request(url)
+            .get(epath)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                    console.log(res.body);
                 }
             });
     }).timeout(20000);
