@@ -63,77 +63,10 @@ exports.isMutant = async function(req, res)
             }
 
             //------------------------------------ VERIFICACION DE ADN -----------------------------
-            var longitudsecuencia = 4;
-            var cantidadsecuencias = 0;
             var cl = columna.length;
-            var fl =filas.length;
+            var fl = filas.length;
 
-            for (var f = 0; f < fl; f++) //verifica secuencia HORIZONTALMENTE --------------------
-            {
-                var c=0;
-                while (c <= (columna.length - longitudsecuencia))
-                {
-                    if (m[f][c] == m[f][c + 1] && m[f][c] == m[f][c + 2] && m[f][c] == m[f][c + 3])
-                    {
-                        cantidadsecuencias = cantidadsecuencias + 1;
-                        c = cl;
-                    }
-                    c++;    
-                }
-                
-            }//----------------------------------------------------------------------------------
-            
-            if(cantidadsecuencias <= 1) //si aun no es mutante
-            {
-                var c = 0;
-                while (c < columna.length)//verifica secuencia VERTICALMENTE ---------------------
-                {
-                    var f = 0;
-                    while (f <= (fl - longitudsecuencia)) 
-                    {
-                        if (m[f][c] == m[f + 1][c] && m[f][c] == m[f + 2][c] && m[f][c] == m[f + 3][c]) 
-                        {
-                            cantidadsecuencias = cantidadsecuencias + 1;
-                                f = fl;
-                        }
-                        f++;
-                    }
-
-                    if (cantidadsecuencias > 1)
-                    {
-                        esmutante = true;
-                        c = columna.length;
-                    }
-                    c++;
-                }//--------------------------------------------------------------------------------
-                
-                if (cantidadsecuencias <= 1) //si aun no es mutante
-                {
-                    var filalimite = fl - longitudsecuencia;
-                    for (var f = 0; f <= filalimite; f++)  //verifica en ----DIAGONAL-------------
-                    {
-                        var c = 0;
-                        while (c <= (cl - longitudsecuencia) )  //cuantas columnas verifica
-                        {
-                            //de izquierda a derecha 
-                            if (m[f][c] == m[f + 1][c + 1] && 
-                                m[f][c] == m[f + 2][c + 2] && 
-                                m[f][c] == m[f + 3][c + 3])
-                            {
-                                cantidadsecuencias ++;
-                            }
-                            //de derecha a izquierda
-                            if (m[f][cl - (1 - c)] == m[f + 1][cl - 2] && 
-                                m[f][cl - (1 - c)] == m[f + 2][cl - 3] && 
-                                m[f][cl - (1 - c)] == m[f + 3][cl - 4]) 
-                            {
-                                cantidadsecuencias ++;
-                            }
-                            c++;
-                        }
-                    }//----------------------------------------------------------------
-                }
-            }
+            var cantidadsecuencias = esMutante(m,cl,fl);
             
             var codigostatus = 0;
             if(cantidadsecuencias <=1) //¿Es mutante o no ?
@@ -144,21 +77,14 @@ exports.isMutant = async function(req, res)
                 esmutante = true;
                 codigostatus = 200;
             }
-            
+            // -------------------------------- GUARDANDO EN BASE DE DATOS ------------------------
+
             //verifico si existe el adn
             const esperando = await estadistica.find({dna:dnaparaguardar},'dna', async function(err,muthum){
                 if(err)  { return handleError(res, err); } });
 
             if(esperando.length<=0){
-                //guardo el registro en bdd
-                const esta = new estadistica();
-                esta.esmutante = esmutante;
-                esta.dna = dnaparaguardar.trim();
-
-                // console.log("Personaje encontrado:" + muthum);
-                await esta.save(function (err) {
-                    if (err) { return handleError(res, err); }
-                });
+                guardar();
             }
 
             //respondo
@@ -175,12 +101,83 @@ function handleError(res, err) {
     return res.sendStatus(500, err);
 }
 
-exports.buscaxdna = async function (req,res)
-{
-    const encontrado = await modelostats.find({ dna: req.params.dna.trim()});
-    res.json(encontrado);
+async function guardar(){
+    //guardo el registro en bdd
+    const esta = new estadistica();
+    esta.esmutante = esmutante;
+    esta.dna = dnaparaguardar.trim();
+
+    // console.log("Personaje encontrado:" + muthum);
+    await esta.save(function (err) {
+        if (err) { return handleError(res, err); }
+    });
 }
 
-function verificadna(m){
+function esMutante(m, cl, fl){
 
+    var longitudsecuencia = 4;
+    var cantidadsecuencias = 0;
+
+
+    for (var f = 0; f < fl; f++) //verifica secuencia HORIZONTALMENTE --------------------
+    {
+        var c = 0;
+        while (c <= (cl - longitudsecuencia)) {
+            if (m[f][c] == m[f][c + 1] && m[f][c] == m[f][c + 2] && m[f][c] == m[f][c + 3]) {
+                cantidadsecuencias = cantidadsecuencias + 1;
+                c = cl;
+            }
+            c++;
+        }
+
+    }//----------------------------------------------------------------------------------
+
+    if (cantidadsecuencias <= 1) //si aun no es mutante
+    {
+        var c = 0;
+        while (c < cl)//verifica secuencia VERTICALMENTE ---------------------
+        {
+            var f = 0;
+            while (f <= (fl - longitudsecuencia)) {
+                if (m[f][c] == m[f + 1][c] && m[f][c] == m[f + 2][c] && m[f][c] == m[f + 3][c]) {
+                    cantidadsecuencias = cantidadsecuencias + 1;
+                    f = fl;
+                }
+                f++;
+            }
+
+            if (cantidadsecuencias > 1) {
+                esmutante = true;
+                c = cl;
+            }
+            c++;
+        }//--------------------------------------------------------------------------------
+
+        if (cantidadsecuencias <= 1) //si aun no es mutante
+        {
+            var filalimite = fl - longitudsecuencia;
+            for (var f = 0; f <= filalimite; f++)  //verifica en ----DIAGONAL-------------
+            {
+                var c = 0;
+                while (c <= (cl - longitudsecuencia))  //cuantas columnas verifica
+                {
+                    //de izquierda a derecha 
+                    if (m[f][c] == m[f + 1][c + 1] &&
+                        m[f][c] == m[f + 2][c + 2] &&
+                        m[f][c] == m[f + 3][c + 3]) {
+                        cantidadsecuencias++;
+                    }
+                    //de derecha a izquierda
+                    if (m[f][cl - (1 - c)] == m[f + 1][cl - 2] &&
+                        m[f][cl - (1 - c)] == m[f + 2][cl - 3] &&
+                        m[f][cl - (1 - c)] == m[f + 3][cl - 4]) {
+                        cantidadsecuencias++;
+                    }
+                    c++;
+                }
+            }//----------------------------------------------------------------
+        }
+    }
+
+    return cantidadsecuencias;
 }

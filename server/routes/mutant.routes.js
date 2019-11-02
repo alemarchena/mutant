@@ -4,7 +4,6 @@ const router = express.Router();
 const controller = require('../controllers/mutant.controller.js');
 
 router.post('/mutant', controller.isMutant);
-router.get('/mutant/:dna', controller.buscaxdna);
 
 module.exports = router;
 
