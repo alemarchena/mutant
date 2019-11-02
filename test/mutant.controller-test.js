@@ -21,7 +21,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('¿ es HUMANO ? - Matriz adn CUADRADA 6x6', (done) => {
         chai.request(url)
@@ -37,7 +37,7 @@ describe('Controlador de mutantes', () => {
                 
                 }  
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('¿ es MUTANTE ? - Matriz adn CUADRADA 6x6', (done) => {
         chai.request(url)
@@ -52,7 +52,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('DNA erróneo - Matriz CUADRADA 6x6', (done) => {
         chai.request(url)
@@ -67,7 +67,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     //matriz 4x6
     it('¿ es HUMANO ? - Matriz adn 4x6', (done) => {
@@ -83,7 +83,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('¿ es MUTANTE ? - Matriz adn 4x6', (done) => {
         chai.request(url)
@@ -98,7 +98,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('DNA erróneo - Matriz 4x6', (done) => {
         chai.request(url)
@@ -113,7 +113,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     //matriz 8x5
     it('¿ es HUMANO ? - Matriz adn 8x5 - BUSQUEDA DIAGONAL DER-IZQ , IZQ-DER', (done) => {
@@ -129,7 +129,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('¿ es MUTANTE ? - Matriz adn 8x5', (done) => {
         chai.request(url)
@@ -144,7 +144,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('DNA erróneo - Matriz 8x5 caracter inválido en dna', (done) => {
         chai.request(url)
@@ -159,7 +159,7 @@ describe('Controlador de mutantes', () => {
                     done();
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
 
     it('Get Estadísticas ', (done) => {
         chai.request(url)
@@ -173,6 +173,6 @@ describe('Controlador de mutantes', () => {
                     console.log(res.body);
                 }
             });
-    }).timeout(10000);
+    }).timeout(20000);
     
 });

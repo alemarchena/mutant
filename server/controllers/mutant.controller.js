@@ -144,15 +144,10 @@ exports.isMutant = async function(req, res)
                 esmutante = true;
                 codigostatus = 200;
             }
-
-            // console.log(dnaparaguardar.trim());
+            
+            //verifico si existe el adn
             const esperando = await estadistica.find({dna:dnaparaguardar},'dna', async function(err,muthum){
-                if(err) 
-                {
-                    // console.log("Error:" + err + "Muthum:" + muthum);
-                    return handleError(res, err);   
-                }
-            });
+                if(err)  { return handleError(res, err); } });
 
             if(esperando.length<=0){
                 //guardo el registro en bdd
