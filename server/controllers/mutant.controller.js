@@ -3,7 +3,7 @@ const estadistica = require('../models/stats.model');
 
 let respuesta = {
     error: true,
-    codigo: 403,
+    codigo: 400,
     mensaje: 'dna inválido'
 };
 
@@ -16,7 +16,7 @@ exports.isMutant = async function(req, res)
 
         if (!mutante.dna) {
 
-            res.status(403).send(respuesta);
+            res.status(400).send(respuesta);
             return;
         }
         else 
@@ -37,8 +37,8 @@ exports.isMutant = async function(req, res)
                     validadorcolumna = columna.length;
                 
                 //valido que todas los registros del json tengan el mismo tamaño
-                if(validadorcolumna != columna.length ) {res.status(403).send(respuesta);return;} //ERROR
-
+                if (validadorcolumna != columna.length || columna.length < base.length) {res.status(400).send(respuesta);return;} //ERROR
+                
                 for(var c=0; c < columna.length ;c++)
                 {   
                     var caracter = columna.substring(c, c + 1); //encolumno los caracteres
@@ -177,7 +177,6 @@ function handleError(res, err) {
 
 exports.buscaxdna = async function (req,res)
 {
-    console.log("Registro buscado WEB:" + req.params.dna.trim());
     const encontrado = await modelostats.find({ dna: req.params.dna.trim()});
     res.json(encontrado);
 }

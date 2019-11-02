@@ -17,7 +17,7 @@ describe('Controlador de mutantes', () => {
                 if (err) {
                     done(err);
                 } else {
-                    expect(res).to.have.status(403);
+                    expect(res).to.have.status(400);
                     done();
                 }
             });
@@ -54,7 +54,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('DNA erróneo - Matriz CUADRADA 6x6', (done) => {
+    it('DNA erróneo (diferentes dimensiones en la matriz )- Matriz CUADRADA 6x6', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -63,7 +63,7 @@ describe('Controlador de mutantes', () => {
                 if (err) {
                     done(err);
                 } else {
-                    expect(res).to.have.status(403);
+                    expect(res).to.have.status(400);
                     done();
                 }
             });
@@ -100,7 +100,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('DNA erróneo - Matriz 4x6', (done) => {
+    it('DNA erróneo (diferentes dimensiones en la matriz) - Matriz 4x6', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -109,7 +109,7 @@ describe('Controlador de mutantes', () => {
                 if (err) {
                     done(err);
                 } else {
-                    expect(res).to.have.status(403);
+                    expect(res).to.have.status(400);
                     done();
                 }
             });
@@ -146,7 +146,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('DNA erróneo - Matriz 8x5 caracter inválido en dna', (done) => {
+    it('DNA erróneo - Matriz 8x5 caracter (y) inválido  en dna, ', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -155,13 +155,103 @@ describe('Controlador de mutantes', () => {
                 if (err) {
                     done(err);
                 } else {
-                    expect(res).to.have.status(403);
+                    expect(res).to.have.status(400);
                     done();
                 }
             });
     }).timeout(20000);
 
-    it('Get Estadísticas ', (done) => {
+    it('Prueba con Matriz de 1x4 MUTANTE', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"AAAA\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                }
+            });
+    }).timeout(20000);
+
+    it('Prueba con Matriz de 1x4 HUMANO', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"ACAA\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                }
+            });
+    }).timeout(20000);
+
+    it('Prueba con Matriz de 1x1', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"A\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(400);
+                    done();
+                }
+            });
+    }).timeout(20000);
+
+    it('Matriz con caracteres de dna invalidos, solo admite G,T,C,H', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"AAAAGGTTTHHCHTA\",\"GGTTTHHCHTAAAAA\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(400);
+                    done();
+                }
+            });
+    }).timeout(20000);
+
+    it('Prueba con Matriz invalida', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(400);
+                    done();
+                }
+            });
+    }).timeout(20000);
+
+    it('¿Es mutante? - Matriz de 1x15', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"AAAAGGTTTCCCATA\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                }
+            });
+    }).timeout(20000);
+
+    it('Estadísticas de mutantes y humanos ', (done) => {
         chai.request(url)
             .get(epath)
             .end(function (err, res) {
@@ -174,5 +264,33 @@ describe('Controlador de mutantes', () => {
                 }
             });
     }).timeout(20000);
+
+    it('¿Es mutante? Repitiendo un mismo dna - no debe guardar en la bdd', (done) => {
+        chai.request(url)
+            .post(path)
+            .set('Content-Type', 'application/json')
+            .send({ "dna": "[\"AAAAGGTTTCCCATA\"]" })
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                }
+            });
+    }).timeout(20000);
     
+    it('Estadísticas verificando que no se repita un registro existente ', (done) => {
+        chai.request(url)
+            .get(epath)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                    console.log(res.body);
+                }
+            });
+    }).timeout(20000);
 });
