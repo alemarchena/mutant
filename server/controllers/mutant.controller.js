@@ -113,6 +113,24 @@ async function guardar(esmutante,dnaparaguardar){
     });
 }
 
+ exports.elimnartodo = async function() {
+    const estadistica = require('../models/stats.model');
+
+    //elimino todos los datos de la coleccion
+    // const esta = new estadistica();
+    // esta.esmutante = esmutante;
+    // esta.dna = dnaparaguardar.trim();
+
+    // console.log("Personaje encontrado:" + muthum);
+     await estadistica.remove(function (err) {
+        if (err) { 
+            return handleError(res, err); 
+        }
+
+        res.sendStatus(100);
+    });
+}
+
 function esMutante(m, cl, fl){
 
     var longitudsecuencia = 4;

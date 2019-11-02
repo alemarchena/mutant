@@ -6,6 +6,7 @@ const url = "https://mutant-ml.herokuapp.com";
 var path = '/mutant';
 var epath = '/stats';
 
+
 describe('Controlador de mutantes', () => {
   
     it('0) Verificando division por cero en base vacía ', (done) => {
@@ -37,7 +38,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('2) ¿ es HUMANO ? - Matriz adn CUADRADA 6x6', (done) => {
+    it('2) Verificar y Guardar ¿ es HUMANO ? - Matriz adn CUADRADA 6x6', (done) => {
         chai.request(url)
             .post(path)         
             .set('Content-Type', 'application/json')
@@ -53,7 +54,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('3) ¿ es MUTANTE ? - Matriz adn CUADRADA 6x6', (done) => {
+    it('3) Verificar y Guardar ¿ es MUTANTE ? - Matriz adn CUADRADA 6x6', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -84,7 +85,7 @@ describe('Controlador de mutantes', () => {
     }).timeout(20000);
 
     //matriz 4x6
-    it('5) ¿ es HUMANO ? - Matriz adn 4x6', (done) => {
+    it('5) Verificar y Guardar ¿ es HUMANO ? - Matriz adn 4x6', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -99,7 +100,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('6) ¿ es MUTANTE ? - Matriz adn 4x6', (done) => {
+    it('6) Verificar y Guardar ¿ es MUTANTE ? - Matriz adn 4x6', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -130,7 +131,7 @@ describe('Controlador de mutantes', () => {
     }).timeout(20000);
 
     //matriz 8x5
-    it('8) ¿ es HUMANO ? - Matriz adn 8x5 - BUSQUEDA DIAGONAL DER-IZQ , IZQ-DER', (done) => {
+    it('8) Verificar y Guardar ¿ es HUMANO ? - Matriz adn 8x5 - BUSQUEDA DIAGONAL DER-IZQ , IZQ-DER', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -145,7 +146,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('9) ¿ es MUTANTE ? - Matriz adn 8x5', (done) => {
+    it('9) Verificar y Guardar ¿ es MUTANTE ? - Matriz adn 8x5', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -236,7 +237,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('15) ¿Es mutante? - Matriz de 1x15', (done) => {
+    it('15) Verificar y Guardar ¿Es mutante? - Matriz de 1x15', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -265,7 +266,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('17) ¿Es mutante? Repitiendo un mismo dna del TEST 3 - no debe guardar en la bdd', (done) => {
+    it('17) Verificar y No Guardar ¿Es mutante? Repitiendo un mismo dna del TEST 3 - no debe guardar en la bdd', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -294,7 +295,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('19) Prueba con Matriz de 2x4 MUTANTE', (done) => {
+    it('19) Verificar y Guardar - Matriz de 2x4 MUTANTE', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -309,7 +310,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('18) Estadísticas FINAL ', (done) => {
+    it('20) Estadísticas FINAL ', (done) => {
         chai.request(url)
             .get(epath)
             .end(function (err, res) {
@@ -319,6 +320,21 @@ describe('Controlador de mutantes', () => {
                     expect(res).to.have.status(200);
                     done();
                     console.log(res.body);
+                }
+            });
+    }).timeout(20000);
+
+    it('21) Eliminando datos de la colección', (done) => {
+        chai.request(url)
+            .delete(path)
+            .set('Content-Type', 'application/json')
+            .send({})
+            .end(function (err, res, body) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(100);
+                    done();
                 }
             });
     }).timeout(20000);
