@@ -52,7 +52,7 @@ exports.isMutant = async function(req, res)
 
                     }
 
-                    if (!basevalida){ res.status(403).send(respuesta); return; } //ERROR
+                    if (!basevalida){ res.status(400).send(respuesta); return; } //ERROR
 
                     if(caracter )
                     matrizcaracteres[c] = caracter; 
@@ -67,7 +67,7 @@ exports.isMutant = async function(req, res)
             var cantidadsecuencias = 0;
             var cl = columna.length;
             var fl =filas.length;
-        
+
             for (var f = 0; f < fl; f++) //verifica secuencia HORIZONTALMENTE --------------------
             {
                 var c=0;
