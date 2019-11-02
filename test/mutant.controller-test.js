@@ -176,23 +176,8 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('12) Prueba con Matriz de 1x4 HUMANO', (done) => {
-        chai.request(url)
-            .post(path)
-            .set('Content-Type', 'application/json')
-            .send({ "dna": "[\"ACAA\"]" })
-            .end(function (err, res) {
-                if (err) {
-                    done(err);
-                } else {
-                    expect(res).to.have.status(403);
-                    done();
-                }
-            });
-    }).timeout(20000);
-
     
-    it('13) Prueba con Matriz de 1x1', (done) => {
+    it('12) Prueba con Matriz de 1x1', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -207,7 +192,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('14) Matriz con caracteres de dna invalidos, solo admite G,T,C,H', (done) => {
+    it('13) Matriz con caracteres de dna invalidos, solo admite G,T,C,H', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -222,7 +207,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('15 ) Prueba con Matriz invalida', (done) => {
+    it('14 ) Prueba con Matriz invalida', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -237,7 +222,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('16) ¿Es mutante? - Matriz de 1x15', (done) => {
+    it('15) ¿Es mutante? - Matriz de 1x15', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
@@ -246,13 +231,13 @@ describe('Controlador de mutantes', () => {
                 if (err) {
                     done(err);
                 } else {
-                    expect(res).to.have.status(200);
+                    expect(res).to.have.status(403);
                     done();
                 }
             });
     }).timeout(20000);
 
-    it('17) Estadísticas de mutantes y humanos ', (done) => {
+    it('16) Estadísticas de mutantes y humanos ', (done) => {
         chai.request(url)
             .get(epath)
             .end(function (err, res) {
@@ -266,11 +251,11 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('18) ¿Es mutante? Repitiendo un mismo dna - no debe guardar en la bdd', (done) => {
+    it('17) ¿Es mutante? Repitiendo un mismo dna del TEST 3 - no debe guardar en la bdd', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
-            .send({ "dna": "[\"AAAAGGTTTCCCATA\"]" })
+            .send({ "dna": "[\"AAAAAT\",\"CAGTGC\",\"TTAGTT\",\"AGACGG\",\"GCGTCA\",\"TCGGGG\"]" })
             .end(function (err, res) {
                 if (err) {
                     done(err);
@@ -281,7 +266,7 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
     
-    it('19) Estadísticas verificando que no se repita un registro existente ', (done) => {
+    it('18) Estadísticas verificando que no se repita un registro existente ', (done) => {
         chai.request(url)
             .get(epath)
             .end(function (err, res) {
@@ -295,17 +280,31 @@ describe('Controlador de mutantes', () => {
             });
     }).timeout(20000);
 
-    it('20) Prueba con Matriz de 2x4 MUTANTE', (done) => {
+    it('19) Prueba con Matriz de 2x4 MUTANTE', (done) => {
         chai.request(url)
             .post(path)
             .set('Content-Type', 'application/json')
-            .send({ "dna": "[\"AAAA\",\"AAAA\"]" })
+            .send({ "dna": "[\"CCCC\",\"GGGG\"]" })
             .end(function (err, res) {
                 if (err) {
                     done(err);
                 } else {
                     expect(res).to.have.status(200);
                     done();
+                }
+            });
+    }).timeout(20000);
+
+    it('18) Estadísticas FINAL ', (done) => {
+        chai.request(url)
+            .get(epath)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                } else {
+                    expect(res).to.have.status(200);
+                    done();
+                    console.log(res.body);
                 }
             });
     }).timeout(20000);

@@ -180,3 +180,7 @@ exports.buscaxdna = async function (req,res)
     const encontrado = await modelostats.find({ dna: req.params.dna.trim()});
     res.json(encontrado);
 }
+
+function verificadna(m){
+
+}
